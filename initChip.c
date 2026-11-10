@@ -1,3 +1,4 @@
+//    initChip.c
 #include "initChip.h"
 
 void initWDT(void) {
