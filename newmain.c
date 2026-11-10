@@ -1,3 +1,4 @@
+//    main.c
 #include "update.h"
 #include "i2c_driver.h"
 #include "initChip.h"
