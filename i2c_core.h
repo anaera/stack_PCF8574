@@ -68,11 +68,11 @@ static inline void I2C_MasterSendStop(void) {
 
 static inline void I2C_MasterEnableIRQ(void) {
     PIR1bits.SSP1IF = 0;
-    PIE1bits.SSP1IE = 1; //раскомментировать для IRQ крежима
+    PIE1bits.SSP1IE = 1;
 }
 
 static inline void I2C_MasterDisableIRQ(void) {
-    // PIE1bits.SSP1IE = 0; //раскомментировать для IRQ крежима
+    PIE1bits.SSP1IE = 0;
 }
 
 static inline bool I2C_MasterIsIRQ(void) {
@@ -80,14 +80,16 @@ static inline bool I2C_MasterIsIRQ(void) {
 }
 
 static inline void I2C_MasterClearIRQ(void) {
-    PIR1bits.SSP1IF = 0; //сброс IRQ
+    PIR1bits.SSP1IF = 0;
 }
 
 static inline void I2C_MasterEnableBCL(void) {
     PIR2bits.BCL1IF = 0;
     PIE2bits.BCL1IE = 1;
 }
-
+static inline void I2C_MasterDisableBCL(void) {
+     PIE2bits.BCL1IE = 0;
+}
 static inline bool I2C_MasterIsBCL(void) {
     return PIR2bits.BCL1IF;
 }
