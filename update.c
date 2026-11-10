@@ -1,3 +1,4 @@
+//   update.c
 #include "i2c_driver.h"
 #include "update.h"
 #include "epp_full.h"
@@ -34,6 +35,7 @@ static void doCheckError(void);
 void doResetPCF8574() {
     //TODO делаем аппаратный ресет по питанию только PCF8574
     //такая техническая возможность есть.
+    RESET();
 }
 
 void doInitUpdate(void) {
@@ -106,9 +108,9 @@ static void doCheckError(void) {
 }
 
 static void doRecoveryStep(void) {
-    if (I2C_Recover()) { //восстаовилось-пропускаем все остальное и идем на новый цикл
-        updateFunc = doIdleUpdate;
-    } else {//НЕ восстаовилось- и идем на апппаратную перезагрузку
+    if (I2C_Recover()) {
+        updateFunc = doRdUpdate;   /*восстаовилось - ретрай текущего чипа */
+    } else {    /*НЕ восстаовилось - и идем на апппаратную перезагрузку */
         updateFunc = doResetPCF8574;
     }
 }
