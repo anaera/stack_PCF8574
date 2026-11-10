@@ -1,4 +1,4 @@
-
+//    i2c_driver.c
 #ifdef I2C_SIM
 #include  "i2c_core_sim.h"
 #else
@@ -11,38 +11,6 @@ static volatile state_e state; //состояние автомата
 static volatile i2c_api_t *ptr_i2c; //указатель на дескриптор i2c драйвера
 
 //-----------------------------------------------------------------------------
-void I2C_MasterOpen(void);
-void I2C_MasterClose(void);
-void I2C_MasterSendStart(void);
-static inline bool I2C_MasterBusReady(void);
-static inline void I2C_MasterSendTxData(uint8_t data);
-static inline bool I2C_MasterRecvIsNack(void);
-static inline void I2C_MasterSendNack(void);
-static inline void I2C_MasterSendAck(void);
-static inline void I2C_MasterSendRxEN(void);
-static inline uint8_t I2C_MasterGetRxData(void);
-static inline void I2C_MasterSendStop(void);
-static inline void I2C_MasterEnableIRQ(void);
-static inline void I2C_MasterDisableIRQ(void);
-static inline bool I2C_MasterIsIRQ(void);
-static inline void I2C_MasterClearIRQ(void);
-static inline void I2C_MasterEnableBCL(void);
-static inline void I2C_MasterDisableIRQ(void);
-static inline bool I2C_MasterIsBCL(void);
-static inline void I2C_MasterClearBCL(void);
-static inline bool I2C_MasterTxOK(void);
-
-//-----------------------------------------------------------------------------
-static void after_send_START(void);
-static void after_send_ADDR(void);
-static void after_send_DATE(void);
-static void after_send_RxEN(void);
-static void after_send_NAK(void);
-static void do_EXIT(void);
-static void do_IDLE(void);
-
-//-----------------------------------------------------------------------------
-
 void I2C_Init(void) {
     //чтоб не было вопросов ANSELC RC0, RC1 
     ANSELC &= 0xFC; // RC0 и RC1 digital I/O 
@@ -77,6 +45,8 @@ void I2C_Close(void) {
 bool I2C_Start(volatile i2c_api_t *i2c_discriptor) {
     //if (SSP1STATbits.S || !SSP1CON1bits.SSPEN || !PORTCbits.RC1) return false;
     if (!I2C_MasterBusReady()) return false;
+    /* гигиена, не оборона - гасим висячий флаг до взведения state */
+    I2C_MasterClearIRQ();
     ptr_i2c = i2c_discriptor;
     ptr_i2c->error = 0;
     state = _AFTER_SEND_START;
