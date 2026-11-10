@@ -104,7 +104,7 @@ static inline void I2C_MasterClearBCL(void) {
 }
 
 static inline bool I2C_MasterTxOK(void) {
-   return sim_wcol;
+   return !sim_wcol;
 }
 #endif	/* I2C_CODE_SIM_H */
 
