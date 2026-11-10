@@ -7,8 +7,10 @@
 #include "epp_update.h"
 #include "epp_full.h"
 
-#define _UP 0x80    //состояние 1
-#define _DN 0x00    //состояние 0
+#define _DN 0    //состояние 0
+#define _UP 2    //состояние 1
+#define _QP 1    //короткое нажатие
+#define _LP 3    //длинное нажате
 
 typedef union {
     uint8_t total;
